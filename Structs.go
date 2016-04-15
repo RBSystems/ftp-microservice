@@ -19,4 +19,5 @@ type request struct {
 	SubmissionTime time.Time //Will be filled by the server as the time the file transfer began
 	CompletionTime time.Time //Will be filled by the service as the time that a) the file transfer began or b) timed out
 	Status         string    //Timeout or Success
+	Error          string
 }
