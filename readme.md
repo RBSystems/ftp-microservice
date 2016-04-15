@@ -42,10 +42,10 @@ Thus the full payload with all optional and required fields will appear in the f
 
 ```
 {
-	"IPAddressHostname": "string",
-	"CallbackAddress":"",
-	"Path": "string",
-	"File": "./test.txt",
+  "IPAddressHostname": "string",
+  "CallbackAddress":"",
+  "Path": "string",
+  "File": "./test.txt",
   "Identifier": "string",
   "Timeout": int,
   "Username": "string",
