@@ -111,6 +111,8 @@ func sendFile(req request) {
 
 	file, err := os.Open(req.File)
 
+	defer file.Close()
+
 	if err != nil {
 		sendResponse(req, err, "There was an error opening the file")
 		return
