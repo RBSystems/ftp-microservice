@@ -71,6 +71,7 @@ func sendFileHandler(c web.C, w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "File transfer started.")
 }
 
+// Checks to make sure request is actually a valid request
 func checkReq(req request) error {
 	if len(req.CallbackAddress) < 1 || len(req.File) < 1 || len(req.Path) < 1 || len(req.IPAddressHostname) < 1 {
 		return errors.New("Invalid Payload.")
@@ -136,8 +137,8 @@ func sendFile(req request) {
 }
 
 func main() {
-
 	goji.Post("/send", sendFileHandler)
+	goji.Post("/send/", sendFileHandler)
 
 	goji.Serve()
 }
