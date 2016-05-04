@@ -13,21 +13,21 @@ func SendFile(c echo.Context) error {
 
 	err := c.Bind(req)
 	if err != nil {
-		return c.JSON(http.StatusInternalServerError, "Could not read request body: "+err.Error())
+		return c.String(http.StatusInternalServerError, "Could not read request body: "+err.Error())
 	}
 
 	err = helpers.CheckRequest(*req)
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, `Request must be in form of:
-    {
-    	"IPAddressHostname": "string",
-    	"CallbackAddress":"",
-    	"Path": "string",
-    	"File": "./test.txt"
-    }`)
+	  {
+	  	"IPAddressHostname": "string",
+	  	"CallbackAddress":"",
+	  	"Path": "string",
+	  	"File": "./test.txt"
+	  }`)
 	}
 
 	go helpers.SendFile(*req) // Start sending the file asynchronously
 
-	return c.JSON(http.StatusOK, "File transfer started")
+	return c.String(http.StatusOK, "File transfer started")
 }

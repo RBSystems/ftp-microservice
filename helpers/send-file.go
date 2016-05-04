@@ -12,7 +12,7 @@ import (
 
 // SendFile actually sends a file via FTP
 func SendFile(request helpers.Request) {
-	fmt.Printf("Sending file %s \n", request.File)
+	fmt.Printf("Sending file %s\n", request.File)
 
 	request.SubmissionTime = time.Now()
 
@@ -28,16 +28,16 @@ func SendFile(request helpers.Request) {
 	timeout := time.Duration(request.Timeout) * time.Second
 
 	conn, err := ftp.DialTimeout(request.IPAddressHostname+":21", timeout)
-
 	if err != nil {
-		sendResponse(request, err, "Error connecting to the client device")
+		helpers.SendResponse(request, err, "Error connecting to the client device")
 		return
 	}
-	fmt.Printf("Connection opened.\n")
+
+	fmt.Println("Connection opened")
 
 	err = conn.Login(request.Username, request.Password)
 	if err != nil {
-		sendResponse(request, err, "There was an error connecting to the device")
+		helpers.SendResponse(request, err, "There was an error connecting to the device")
 		return
 	}
 
@@ -45,7 +45,7 @@ func SendFile(request helpers.Request) {
 
 	file, err := os.Open(request.File)
 	if err != nil {
-		sendResponse(request, err, "There was an error opening the file")
+		helpers.SendResponse(request, err, "There was an error opening the file")
 		return
 	}
 
@@ -56,15 +56,14 @@ func SendFile(request helpers.Request) {
 	pathToStore := request.Path + "/" + filepath.Base(request.File) // Since the FTP package doesn't do this for us, we add the filename to the dest directory.
 
 	err = conn.Stor(pathToStore, file)
-
 	if err != nil {
-		sendResponse(request, err, "There was an error storing the file")
+		helpers.SendResponse(request, err, "There was an error storing the file")
 		return
 	}
 
 	fmt.Println("Transfer completed")
 
-	sendResponse(request, nil, "")
+	helpers.SendResponse(request, nil, "")
 
 	return
 }
