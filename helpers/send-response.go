@@ -7,23 +7,23 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/byuoitav/ftp-microservice/helpers"
+	"github.com/byuoitav/ftp-microservice/structs"
 )
 
 // SendResponse does something cryptic
-func SendResponse(req helpers.Request, err error, errorString string) {
-	req.CompletionTime = time.Now()
+func SendResponse(request structs.Request, err error, errorString string) {
+	request.CompletionTime = time.Now()
 
 	if err != nil {
-		req.Status = "error"
+		request.Status = "error"
 		errStr := errorString + ": " + err.Error()
-		req.Error = errStr
+		request.Error = errStr
 	} else {
-		req.Status = "success"
+		request.Status = "success"
 	}
 
-	bits, _ := json.Marshal(req)
+	bits, _ := json.Marshal(request)
 
-	http.Post(req.CallbackAddress, "application/json", bytes.NewBuffer(bits))
+	http.Post(request.CallbackAddress, "application/json", bytes.NewBuffer(bits))
 	fmt.Println("Response sent")
 }

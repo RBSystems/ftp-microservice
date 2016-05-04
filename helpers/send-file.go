@@ -6,12 +6,12 @@ import (
 	"path/filepath"
 	"time"
 
-	"github.com/byuoitav/ftp-microservice/helpers"
+	"github.com/byuoitav/ftp-microservice/structs"
 	"github.com/jlaffaye/ftp"
 )
 
 // SendFile actually sends a file via FTP
-func SendFile(request helpers.Request) {
+func SendFile(request structs.Request) {
 	fmt.Printf("Sending file %s\n", request.File)
 
 	request.SubmissionTime = time.Now()
@@ -29,7 +29,7 @@ func SendFile(request helpers.Request) {
 
 	conn, err := ftp.DialTimeout(request.IPAddressHostname+":21", timeout)
 	if err != nil {
-		helpers.SendResponse(request, err, "Error connecting to the client device")
+		SendResponse(request, err, "Error connecting to the client device")
 		return
 	}
 
@@ -37,7 +37,7 @@ func SendFile(request helpers.Request) {
 
 	err = conn.Login(request.Username, request.Password)
 	if err != nil {
-		helpers.SendResponse(request, err, "There was an error connecting to the device")
+		SendResponse(request, err, "There was an error connecting to the device")
 		return
 	}
 
@@ -45,7 +45,7 @@ func SendFile(request helpers.Request) {
 
 	file, err := os.Open(request.File)
 	if err != nil {
-		helpers.SendResponse(request, err, "There was an error opening the file")
+		SendResponse(request, err, "There was an error opening the file")
 		return
 	}
 
@@ -57,13 +57,13 @@ func SendFile(request helpers.Request) {
 
 	err = conn.Stor(pathToStore, file)
 	if err != nil {
-		helpers.SendResponse(request, err, "There was an error storing the file")
+		SendResponse(request, err, "There was an error storing the file")
 		return
 	}
 
 	fmt.Println("Transfer completed")
 
-	helpers.SendResponse(request, nil, "")
+	SendResponse(request, nil, "")
 
 	return
 }

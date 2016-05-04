@@ -1,6 +1,11 @@
-package helpers
+package structs
 
 import "time"
+
+// Response makes RESTful responses JSON friendly
+type Response struct {
+	Message string
+}
 
 // Request represents an incoming request body passed via a RESTful POST
 type Request struct {

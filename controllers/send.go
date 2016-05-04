@@ -4,21 +4,22 @@ import (
 	"net/http"
 
 	"github.com/byuoitav/ftp-microservice/helpers"
+	"github.com/byuoitav/ftp-microservice/structs"
 	"github.com/labstack/echo"
 )
 
 // SendFile initiates an FTP file transfer
 func SendFile(c echo.Context) error {
-	req := &helpers.Request{}
+	request := &structs.Request{}
 
-	err := c.Bind(req)
+	err := c.Bind(request)
 	if err != nil {
 		return c.String(http.StatusInternalServerError, "Could not read request body: "+err.Error())
 	}
 
-	err = helpers.CheckRequest(*req)
+	err = helpers.CheckRequest(*request)
 	if err != nil {
-		return c.JSON(http.StatusBadRequest, `Request must be in form of:
+		return c.String(http.StatusBadRequest, `Request must be in the form of:
 	  {
 	  	"IPAddressHostname": "string",
 	  	"CallbackAddress":"",
@@ -27,7 +28,7 @@ func SendFile(c echo.Context) error {
 	  }`)
 	}
 
-	go helpers.SendFile(*req) // Start sending the file asynchronously
+	go helpers.SendFile(*request) // Start sending the file asynchronously
 
 	return c.String(http.StatusOK, "File transfer started")
 }
