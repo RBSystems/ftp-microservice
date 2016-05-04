@@ -15,7 +15,7 @@ func main() {
 	e.Pre(middleware.RemoveTrailingSlash())
 
 	e.Get("/health", controllers.Health)
-	e.Post("/send", controllers.SendFile)
+	e.Post("/send", Send)
 
 	fmt.Printf("The FTP microservice is listening on %s\n", port)
 	e.Run(fasthttp.New(port))

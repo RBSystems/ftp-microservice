@@ -8,8 +8,8 @@ import (
 	"github.com/labstack/echo"
 )
 
-// SendFile initiates an FTP file transfer
-func SendFile(c echo.Context) error {
+// Send initiates an FTP file transfer
+func Send(c echo.Context) error {
 	request := &structs.Request{}
 
 	err := c.Bind(request)
@@ -20,12 +20,12 @@ func SendFile(c echo.Context) error {
 	err = helpers.CheckRequest(*request)
 	if err != nil {
 		return c.String(http.StatusBadRequest, `Request must be in the form of:
-	  {
-	  	"IPAddressHostname": "string",
-	  	"CallbackAddress":"",
-	  	"Path": "string",
-	  	"File": "./test.txt"
-	  }`)
+		{
+			"IPAddressHostname": "string",
+			"CallbackAddress":"",
+			"Path": "string",
+			"File": "./test.txt"
+		}`)
 	}
 
 	go helpers.SendFile(*request) // Start sending the file asynchronously

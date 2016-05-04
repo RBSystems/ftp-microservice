@@ -7,8 +7,8 @@ import (
 )
 
 // CheckRequest to make sure request is actually a valid request
-func CheckRequest(req structs.Request) error {
-	if len(req.CallbackAddress) < 1 || len(req.File) < 1 || len(req.Path) < 1 || len(req.IPAddressHostname) < 1 {
+func CheckRequest(request structs.Request) error {
+	if len(request.CallbackAddress) < 1 || len(request.File) < 1 || len(request.Path) < 1 || len(request.IPAddressHostname) < 1 {
 		return errors.New("Invalid payload")
 	}
 
