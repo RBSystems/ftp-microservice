@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 
-	"github.com/byuoitav/av-api/controllers"
+	"github.com/byuoitav/ftp-microservice/controllers"
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/engine/fasthttp"
 	"github.com/labstack/echo/middleware"
