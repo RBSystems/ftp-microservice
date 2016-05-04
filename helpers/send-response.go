@@ -1,29 +1,17 @@
 package helpers
 
 import (
-	"bytes"
-	"encoding/json"
-	"fmt"
 	"net/http"
-	"time"
 
 	"github.com/byuoitav/ftp-microservice/structs"
+	"github.com/labstack/echo"
 )
 
-// SendResponse does something cryptic
-func SendResponse(request structs.Request, err error, errorString string) {
-	request.CompletionTime = time.Now()
-
-	if err != nil {
-		request.Status = "error"
-		errStr := errorString + ": " + err.Error()
-		request.Error = errStr
-	} else {
-		request.Status = "success"
+// SendResponse returns a message in proper JSON format
+func SendResponse(c echo.Context, message string) error {
+	response := &structs.Response{
+		Message: message,
 	}
 
-	bits, _ := json.Marshal(request)
-
-	http.Post(request.CallbackAddress, "application/json", bytes.NewBuffer(bits))
-	fmt.Println("Response sent")
+	return c.JSON(http.StatusOK, *response)
 }

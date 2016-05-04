@@ -29,7 +29,7 @@ func SendFile(request structs.Request) {
 
 	conn, err := ftp.DialTimeout(request.IPAddressHostname+":21", timeout)
 	if err != nil {
-		SendResponse(request, err, "Error connecting to the client device")
+		CallCallback(request, "Error connecting to the client device"+err.Error())
 		return
 	}
 
@@ -37,7 +37,7 @@ func SendFile(request structs.Request) {
 
 	err = conn.Login(request.Username, request.Password)
 	if err != nil {
-		SendResponse(request, err, "There was an error connecting to the device")
+		CallCallback(request, "There was an error connecting to the device: "+err.Error())
 		return
 	}
 
@@ -45,7 +45,7 @@ func SendFile(request structs.Request) {
 
 	file, err := os.Open(request.File)
 	if err != nil {
-		SendResponse(request, err, "There was an error opening the file")
+		CallCallback(request, "There was an error opening the file"+err.Error())
 		return
 	}
 
@@ -57,13 +57,13 @@ func SendFile(request structs.Request) {
 
 	err = conn.Stor(pathToStore, file)
 	if err != nil {
-		SendResponse(request, err, "There was an error storing the file")
+		CallCallback(request, "There was an error storing the file"+err.Error())
 		return
 	}
 
 	fmt.Println("Transfer completed")
 
-	SendResponse(request, nil, "")
+	CallCallback(request, "")
 
 	return
 }
