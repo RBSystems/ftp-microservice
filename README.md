@@ -1,5 +1,7 @@
 # FTP Microservice
 
+[![View in Swagger](http://www.jessemillar.com/view-in-swagger-button/button.svg)](https://byuoitav.github.io/ftp-microservice/)
+
 A microservice to send files to clients over FTP asynchronously. Specifically designed for Crestron systems.
 
 ## Endpoints
