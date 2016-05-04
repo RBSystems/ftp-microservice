@@ -14,14 +14,14 @@ A microservice to send files to clients over FTP asynchronously. Specifically de
 
   ```
 {
-	"IPAddressHostname": "string",
+	"DestinationAddress": "string",
 	"CallbackAddress":"",
 	"Path": "string",
 	"File": "./test.txt"
 }
 ```
 
-- IPAddressHostname: IPAddress or hostname of the device
+- DestinationAddress: IPAddress or hostname of the device
 - CallbackAddress: Complete address of the server to contact with POST request when complete
 - Path: The **directory** on the device, relative to root, to store the file transferred
 - File: The path to the file to send (must be accessible and readable from the server running the service)
@@ -45,7 +45,7 @@ Thus the full payload with all optional and required fields will appear in the f
 
 ```
 {
-  "IPAddressHostname": "string",
+  "DestinationAddress": "string",
   "CallbackAddress":"",
   "Path": "string",
   "File": "./test.txt",
@@ -64,7 +64,7 @@ The response will come in the form of
 
 ```
 {
-  "IPAddressHostname": "string",
+  "DestinationAddress": "string",
   "Path": "string",
   "File": "./test.txt",
   "CallbackAddress": "string",

@@ -14,21 +14,33 @@ func Send(c echo.Context) error {
 
 	err := c.Bind(request)
 	if err != nil {
-		return c.String(http.StatusInternalServerError, "Could not read request body: "+err.Error())
+		response := &structs.Response{
+			Message: "Could not read request body: " + err.Error(),
+		}
+
+		return c.JSON(http.StatusOK, *response)
 	}
 
 	err = helpers.CheckRequest(*request)
 	if err != nil {
-		return c.String(http.StatusBadRequest, `Request must be in the form of:
-		{
-			"IPAddressHostname": "string",
-			"CallbackAddress":"",
-			"Path": "string",
-			"File": "./test.txt"
-		}`)
+		response := &structs.Response{
+			Message: `Request must be in the form of:
+  		{
+  			"DestinationAddress": "string",
+  			"CallbackAddress":"",
+  			"Path": "string",
+  			"File": "./test.txt"
+  		}`,
+		}
+
+		return c.JSON(http.StatusOK, *response)
 	}
 
 	go helpers.SendFile(*request) // Start sending the file asynchronously
 
-	return c.String(http.StatusOK, "File transfer started")
+	response := &structs.Response{
+		Message: "File transfer started",
+	}
+
+	return c.JSON(http.StatusOK, *response)
 }

@@ -17,14 +17,14 @@ paths:
       description: |
         Returns information about all the FTP microservice's health.
       tags:
-        - Rooms
+        - Health
       responses:
         200:
-          description: An array of rooms
+          description: A health message
           schema:
             type: array
             items:
-              $ref: "#/definitions/RoomResponse"
+              $ref: "#/definitions/response"
         401:
           $ref: "#/responses/401"
         500:
@@ -37,21 +37,21 @@ paths:
     post:
       summary: Send a File
       description: |
-        Make a new room and add it to the Crestron Fusion database.
+        Send a file through the FTP microservice.
       parameters:
         - name: body
-          description: The new room to created
+          description: Information about the file to be sent over FTP
           in: body
           required: true
           schema:
-            $ref: "#/definitions/RoomRequest"
+            $ref: "#/definitions/file-request"
       tags:
-        - Rooms
+        - FTP
       responses:
         201:
           description: All went well
           schema:
-            $ref: "#/definitions/RoomResponse"
+            $ref: "#/definitions/response"
         401:
           $ref: "#/responses/401"
         500:
@@ -60,7 +60,6 @@ paths:
           $ref: "#/responses/503"
         default:
           $ref: "#/responses/default"
-
 definitions:
   HATEOAS:
     type: object
@@ -71,235 +70,67 @@ definitions:
       href:
         type: string
         description: The link to the endpoint
-  DNS:
-    type: object
-    properties:
-      address:
-        type: string
-        description: The IP address of a DNS server
-  Room:
+  response:
     type: object
     properties:
       links:
         type: array
         items:
           $ref: "#/definitions/HATEOAS"
-      name:
+      message:
         type: string
-        description: The human-readable name of the room
-      ID:
-        type: string
-        description: The GUID of the room
-      roomID:
-        type: string
-        description: The room number
-      description:
-        type: string
-        description: A human-readable description of the room
-      address:
-        type: string
-        description: The IP address of the processor
-      signals:
-        type: array
-        description: The available signals attached to this processor
-        items:
-          $ref: "#/definitions/SignalRequest"
-      available:
-        type: boolean
-        description: |
-          Whether or not the room is currently available (calculated based on
-          campus room scheduling and whether or not the room"s processor
-          reports as in-use)
-  RoomResponse:
+        description: A human-readable message about what just happened
+  file-request:
     type: object
+    required:
+      - "FileLocation"
+      - "DestinationAddress"
+      - "DestinationDirectory"
+      - "CallbackAddress"
     properties:
-      links:
-        type: array
-        items:
-          $ref: "#/definitions/HATEOAS"
-      rooms:
-        type: array
-        items:
-          $ref: "#/definitions/Room"
-  RoomRequest:
-    type: object
-    properties:
-      name:
+      FileLocation:
         type: string
-        description: The human-readable name of the room
-      roomID:
+        description: The location of the file to be transferred
+      DestinationAddress:
         type: string
-        description: The room number
-      description:
+        description: The address of the machine on the receiving end of the FTP connection
+      DestinationDirectory:
         type: string
-        description: A human-readable description of the room
-  Device:
-    type: object
-    properties:
-      links:
-        type: array
-        items:
-          $ref: "#/definitions/HATEOAS"
-      hostname:
+        description: The directory on the receiving device, relative to root, where we will store the transferred file
+      CallbackAddress:
         type: string
-        description: The hostname of the device
-      description:
+        description: The address to POST to upon FTP completion
+      CallbackIdentifier:
         type: string
-        description: A human-readable description of the device
-      room:
-        type: object
-        description: Information about the room containing the device
-        $ref: "#/definitions/Room"
-      address:
+        description: A value passed to the callback address to identify the process that was completed
+      UsernameFTP:
         type: string
-        description: The IP address of the processor
-      subnet:
+        description: The username to use when initiating FTP (defaults to "anonymous")
+      PasswordFTP:
         type: string
-        description: The IP subnet mask of the device
-      gateway:
-        type: string
-        description: The device's default gateway
-      serial:
-        type: string
-        description: The serial number of the device
-      MAC:
-        type: string
-        description: The MAC address of the device
-      DNS:
-        type: array
-        description: The DNS servers declared for the device
-        items:
-          $ref: "#/definitions/DNS"
-  DeviceResponse:
-    type: object
-    properties:
-      links:
-        type: array
-        items:
-          $ref: "#/definitions/HATEOAS"
-      device:
-        $ref: "#/definitions/Device"
-  Building:
-    type: object
-    properties:
-      links:
-        type: array
-        items:
-          $ref: "#/definitions/HATEOAS"
-      name:
-        type: string
-        description: The human-readable name of the building
-      ID:
-        type: string
-        description: The GUID of the building
-      shortname:
-        type: string
-        description: The building shortname
-      description:
-        type: string
-        description: A human-readable description of the building
-  BuildingResponse:
-    type: object
-    properties:
-      links:
-        type: array
-        items:
-          $ref: "#/definitions/HATEOAS"
-      buildings:
-        type: array
-        items:
-          $ref: "#/definitions/Building"
-  BuildingRequest:
-    type: object
-    properties:
-      name:
-        type: string
-        description: The human-readable name of the room
-      roomID:
-        type: string
-        description: The room number
-      description:
-        type: string
-        description: A human-readable description of the room
-  Signal:
-    type: object
-    properties:
-      name:
-        type: string
-        description: The human-readable name of the signal
-      ID:
-        type: string
-        description: The GUID of the signal
-      type:
+        description: The password to use when initiating FTP (defaults to "anonymous")
+      Timeout:
         type: integer
-        description: Crestron-defined signal type
-      modified:
-        type: string
-        description: The date this signal was last modified
-  SignalResponse:
-    type: object
-    properties:
-      links:
-        type: array
-        items:
-          $ref: "#/definitions/HATEOAS"
-      signals:
-        type: array
-        items:
-          $ref: "#/definitions/Signal"
-  SignalRequest:
-    type: object
-    properties:
-      name:
-        type: string
-        description: The human-readable name of the signal
-      type:
-        type: integer
-        description: Crestron-defined signal type
-  Error:
+        description: The amount of time, in seconds, to wait for the destination device to respond to a request to open an FTP connection (defaults to 30)
+  error:
     type: object
     properties:
       message:
         type: string
-parameters:
-  building:
-    name: building
-    in: path
-    description: Building shortname
-    required: true
-    type: string
-  room:
-    name: room
-    in: path
-    description: Room name
-    required: true
-    type: string
-  hostname:
-    name: hostname
-    in: path
-    description: Device hostname
-    required: true
-    type: string
-  signal:
-    name: signal
-    in: path
-    description: Signal ID
-    required: true
-    type: string
 responses:
   401:
     description: You are not authorized to make that request
     schema:
-      $ref: "#/definitions/Error"
+      $ref: "#/definitions/error"
   500:
     description: There was a problem with the server on our end
     schema:
-      $ref: "#/definitions/Error"
+      $ref: "#/definitions/error"
   503:
     description: The server is overloaded, is under maintenance, or is otherwise unavailable
     schema:
-      $ref: "#/definitions/Error"
+      $ref: "#/definitions/error"
   default:
     description: Unexpected error
     schema:
-      $ref: "#/definitions/Error"
+      $ref: "#/definitions/error"

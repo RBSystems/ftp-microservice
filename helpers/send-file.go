@@ -27,7 +27,7 @@ func SendFile(request structs.Request) {
 
 	timeout := time.Duration(request.Timeout) * time.Second
 
-	conn, err := ftp.DialTimeout(request.IPAddressHostname+":21", timeout)
+	conn, err := ftp.DialTimeout(request.DestinationAddress+":21", timeout)
 	if err != nil {
 		CallCallback(request, "Error connecting to the client device"+err.Error())
 		return
