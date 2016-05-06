@@ -17,7 +17,7 @@ paths:
       description: |
         Returns information about all the FTP microservice's health.
       tags:
-        - Health
+        - FTP
       responses:
         200:
           description: A health message
@@ -35,7 +35,7 @@ paths:
           $ref: "#/responses/default"
   /send:
     get:
-      summary: Get Send Information
+      summary: Use Microservice
       description: |
         Returns information about the /send enpoint.
       tags:

@@ -24,5 +24,5 @@ func CallCallback(request structs.Request, err string) {
 	bits, _ := json.Marshal(request)
 
 	http.Post(request.CallbackAddress, "application/json", bytes.NewBuffer(bits))
-	fmt.Println("Response sent")
+	fmt.Printf("Response sent: %+v", request)
 }

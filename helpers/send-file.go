@@ -12,7 +12,7 @@ import (
 
 // SendFile actually sends a file via FTP
 func SendFile(request structs.Request) {
-	fmt.Printf("Sending file %s\n", request.File)
+	fmt.Printf("Sending file %s\n", request.FileLocation)
 
 	request.SubmissionTime = time.Now()
 
@@ -20,22 +20,22 @@ func SendFile(request structs.Request) {
 		request.Timeout = 30
 	}
 
-	if len(request.Username) < 1 {
-		request.Username = "anonymous"
-		request.Password = "anonymous"
+	if len(request.UsernameFTP) < 1 {
+		request.UsernameFTP = "anonymous"
+		request.PasswordFTP = "anonymous"
 	}
 
 	timeout := time.Duration(request.Timeout) * time.Second
 
 	conn, err := ftp.DialTimeout(request.DestinationAddress+":21", timeout)
 	if err != nil {
-		CallCallback(request, "Error connecting to the client device"+err.Error())
+		CallCallback(request, "Error connecting to the client device: "+err.Error())
 		return
 	}
 
 	fmt.Println("Connection opened")
 
-	err = conn.Login(request.Username, request.Password)
+	err = conn.Login(request.UsernameFTP, request.PasswordFTP)
 	if err != nil {
 		CallCallback(request, "There was an error connecting to the device: "+err.Error())
 		return
@@ -43,9 +43,9 @@ func SendFile(request structs.Request) {
 
 	fmt.Println("Authenticated succesfully")
 
-	file, err := os.Open(request.File)
+	file, err := os.Open(request.FileLocation)
 	if err != nil {
-		CallCallback(request, "There was an error opening the file"+err.Error())
+		CallCallback(request, "There was an error opening the file: "+err.Error())
 		return
 	}
 
@@ -53,11 +53,11 @@ func SendFile(request structs.Request) {
 
 	fmt.Println("File opened; starting transfer")
 
-	pathToStore := request.Path + "/" + filepath.Base(request.File) // Since the FTP package doesn't do this for us, we add the filename to the dest directory.
+	pathToStore := request.DestinationDirectory + "/" + filepath.Base(request.FileLocation) // Since the FTP package doesn't do this for us, we add the filename to the destination directory
 
 	err = conn.Stor(pathToStore, file)
 	if err != nil {
-		CallCallback(request, "There was an error storing the file"+err.Error())
+		CallCallback(request, "There was an error storing the file: "+err.Error())
 		return
 	}
 

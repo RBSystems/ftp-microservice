@@ -23,6 +23,7 @@ func main() {
 
 	e.Get("/", controllers.Root)
 	e.Get("/health", controllers.Health)
+	e.Get("/send", controllers.SendInfo)
 	e.Post("/send", controllers.Send)
 
 	fmt.Printf("The FTP microservice is listening on %s\n", port)

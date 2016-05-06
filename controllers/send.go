@@ -8,6 +8,15 @@ import (
 	"github.com/labstack/echo"
 )
 
+// SendInfo returns information about the /send endpoint
+func SendInfo(c echo.Context) error {
+	response := &structs.Response{
+		Message: "Send a POST request to the /send endpoint with a body including at least FileLocation, DestinationAddress, DestinationDirectory, and CallbackAddress tokens",
+	}
+
+	return c.JSON(http.StatusOK, *response)
+}
+
 // Send initiates an FTP file transfer
 func Send(c echo.Context) error {
 	request := &structs.Request{}
@@ -24,13 +33,7 @@ func Send(c echo.Context) error {
 	err = helpers.CheckRequest(*request)
 	if err != nil {
 		response := &structs.Response{
-			Message: `Request must be in the form of:
-  		{
-  			"DestinationAddress": "string",
-  			"CallbackAddress":"",
-  			"Path": "string",
-  			"File": "./test.txt"
-  		}`,
+			Message: "Requests must include at least FileLocation, DestinationAddress, DestinationDirectory, and CallbackAddress tokens",
 		}
 
 		return c.JSON(http.StatusOK, *response)
