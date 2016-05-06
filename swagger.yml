@@ -17,7 +17,7 @@ paths:
       description: |
         Returns information about all the FTP microservice's health.
       tags:
-        - FTP
+        - Health
       responses:
         200:
           description: A health message
@@ -39,7 +39,7 @@ paths:
       description: |
         Returns information about the /send enpoint.
       tags:
-        - Health
+        - FTP
       responses:
         200:
           description: Endpoint information
