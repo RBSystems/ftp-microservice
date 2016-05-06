@@ -34,6 +34,27 @@ paths:
         default:
           $ref: "#/responses/default"
   /send:
+    get:
+      summary: Get Send Information
+      description: |
+        Returns information about the /send enpoint.
+      tags:
+        - Health
+      responses:
+        200:
+          description: Endpoint information
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/response"
+        401:
+          $ref: "#/responses/401"
+        500:
+          $ref: "#/responses/500"
+        503:
+          $ref: "#/responses/503"
+        default:
+          $ref: "#/responses/default"
     post:
       summary: Send a File
       description: |

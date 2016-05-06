@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/byuoitav/ftp-microservice/structs"
@@ -21,8 +20,6 @@ func Root(c echo.Context) error {
 
 		return c.JSON(http.StatusBadRequest, *response)
 	}
-
-	fmt.Println("ONE")
 
 	hateoasObject.Links = links
 
