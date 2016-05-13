@@ -5,6 +5,7 @@ import (
 
 	"github.com/byuoitav/ftp-microservice/controllers"
 	"github.com/byuoitav/hateoas"
+	"github.com/jessemillar/health"
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/engine/fasthttp"
 	"github.com/labstack/echo/middleware"
@@ -22,7 +23,7 @@ func main() {
 	e.Pre(middleware.RemoveTrailingSlash())
 
 	e.Get("/", controllers.Root)
-	e.Get("/health", controllers.Health)
+	e.Get("/health", health.Check)
 	e.Get("/send", controllers.SendInfo)
 	e.Post("/send", controllers.Send)
 
