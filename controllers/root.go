@@ -3,7 +3,7 @@ package controllers
 import (
 	"net/http"
 
-	"github.com/byuoitav/ftp-microservice/structs"
+	"github.com/byuoitav/ftp-microservice/helpers"
 	"github.com/byuoitav/hateoas"
 	"github.com/labstack/echo"
 )
@@ -14,7 +14,7 @@ func Root(c echo.Context) error {
 
 	links, err := hateoas.AddLinks(c.Path(), []string{})
 	if err != nil {
-		response := &structs.Response{
+		response := &helpers.Response{
 			Message: "An error occurred: " + err.Error(),
 		}
 

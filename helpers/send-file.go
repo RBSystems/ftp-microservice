@@ -6,12 +6,11 @@ import (
 	"path/filepath"
 	"time"
 
-	"github.com/byuoitav/ftp-microservice/structs"
 	"github.com/jlaffaye/ftp"
 )
 
 // SendFile actually sends a file via FTP
-func SendFile(request structs.Request) {
+func SendFile(request Request) {
 	fmt.Printf("Sending file %s\n", request.FileLocation)
 
 	request.SubmissionTime = time.Now()

@@ -6,12 +6,10 @@ import (
 	"fmt"
 	"net/http"
 	"time"
-
-	"github.com/byuoitav/ftp-microservice/structs"
 )
 
 // CallCallback notifies an external service that the FTP file transfer is complete
-func CallCallback(request structs.Request, err string) {
+func CallCallback(request Request, err string) {
 	request.CompletionTime = time.Now()
 
 	if err != "" {
