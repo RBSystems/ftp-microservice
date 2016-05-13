@@ -15,7 +15,7 @@ paths:
     get:
       summary: Check Service Health
       description: |
-        Returns information about all the FTP microservice's health.
+        Returns information about the microservice's health.
       tags:
         - Health
       responses:
