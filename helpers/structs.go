@@ -8,6 +8,7 @@ type Request struct {
 	DestinationAddress   string // Hostname to be sent the file
 	DestinationDirectory string // Path indicates where to store the file on the server
 	FileLocation         string // Local location of the file to be sent (must be accessible from the server running the service)
+	Filename             string
 	CallbackAddress      string // Complete address to send the notification that the file transfer is complete
 
 	// Optional Fields

@@ -1,9 +1,7 @@
 package helpers
 
 import (
-	"fmt"
 	"os"
-	"path/filepath"
 	"time"
 
 	"github.com/jlaffaye/ftp"
@@ -11,8 +9,6 @@ import (
 
 // SendFile actually sends a file via FTP
 func SendFile(request Request) {
-	fmt.Println("Sending file")
-
 	request.SubmissionTime = time.Now()
 
 	if request.Timeout == 0 {
@@ -32,17 +28,13 @@ func SendFile(request Request) {
 		return
 	}
 
-	fmt.Println("Connection opened")
-
 	err = conn.Login(request.UsernameFTP, request.PasswordFTP)
 	if err != nil {
 		CallCallback(request, "There was an error connecting to the device: "+err.Error())
 		return
 	}
 
-	fmt.Println("Authenticated succesfully")
-
-	file, err := os.Open(request.FileLocation)
+	file, err := os.Open("downloads/" + request.Filename)
 	if err != nil {
 		CallCallback(request, "There was an error opening the file: "+err.Error())
 		return
@@ -50,9 +42,7 @@ func SendFile(request Request) {
 
 	defer file.Close()
 
-	fmt.Println("File opened; starting transfer")
-
-	pathToStore := request.DestinationDirectory + "/" + filepath.Base(request.FileLocation) // Since the FTP package doesn't do this for us, we add the filename to the destination directory
+	pathToStore := request.DestinationDirectory + "/" + request.Filename // Since the FTP package doesn't do this for us, we add the filename to the destination directory
 
 	err = conn.Stor(pathToStore, file)
 	if err != nil {
@@ -60,9 +50,5 @@ func SendFile(request Request) {
 		return
 	}
 
-	fmt.Println("Transfer completed")
-
 	CallCallback(request, "")
-
-	return
 }

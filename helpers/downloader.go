@@ -1,7 +1,6 @@
 package helpers
 
 import (
-	"fmt"
 	"io"
 	"net/http"
 	"os"
@@ -11,12 +10,10 @@ import (
 // DownloadFile downloads the file reference in the POST body
 func DownloadFile(request Request) (Request, error) {
 	urlTokens := strings.Split(request.FileLocation, "/")
-	request.FileLocation = urlTokens[len(urlTokens)-1]
-
-	fmt.Println(request.FileLocation)
+	request.Filename = urlTokens[len(urlTokens)-1]
 
 	// Download the referenced file
-	output, err := os.Create(request.FileLocation)
+	output, err := os.Create("downloads/" + request.Filename)
 	if err != nil {
 		return Request{}, err
 	}
@@ -30,12 +27,10 @@ func DownloadFile(request Request) (Request, error) {
 
 	defer response.Body.Close()
 
-	n, err := io.Copy(output, response.Body)
+	_, err = io.Copy(output, response.Body)
 	if err != nil {
 		return Request{}, err
 	}
-
-	fmt.Println(n, "bytes downloaded")
 
 	return request, nil
 }
