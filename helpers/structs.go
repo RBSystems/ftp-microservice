@@ -2,17 +2,13 @@ package helpers
 
 import "time"
 
-// Response makes RESTful responses JSON friendly
-type Response struct {
-	Message string
-}
-
 // Request represents an incoming request body passed via a RESTful POST
 type Request struct {
 	// Required fields
 	DestinationAddress   string // Hostname to be sent the file
 	DestinationDirectory string // Path indicates where to store the file on the server
 	FileLocation         string // Local location of the file to be sent (must be accessible from the server running the service)
+	Filename             string
 	CallbackAddress      string // Complete address to send the notification that the file transfer is complete
 
 	// Optional Fields

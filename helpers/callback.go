@@ -3,7 +3,6 @@ package helpers
 import (
 	"bytes"
 	"encoding/json"
-	"fmt"
 	"net/http"
 	"time"
 )
@@ -22,5 +21,4 @@ func CallCallback(request Request, err string) {
 	bits, _ := json.Marshal(request)
 
 	http.Post(request.CallbackAddress, "application/json", bytes.NewBuffer(bits))
-	fmt.Printf("Response sent: %+v", request)
 }

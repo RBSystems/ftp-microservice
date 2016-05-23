@@ -1,59 +1,37 @@
 package controllers
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/byuoitav/ftp-microservice/helpers"
+	"github.com/jessemillar/jsonresp"
 	"github.com/labstack/echo"
 )
 
 // SendInfo returns information about the /send endpoint
-func SendInfo(c echo.Context) error {
-	response := &helpers.Response{
-		Message: "Send a POST request to the /send endpoint with a body including at least FileLocation, DestinationAddress, DestinationDirectory, and CallbackAddress tokens",
-	}
-
-	return c.JSON(http.StatusOK, *response)
+func SendInfo(context echo.Context) error {
+	return jsonresp.Create(context, http.StatusBadRequest, "Send a POST request to the /send endpoint with a body including at least DestinationAddress, DestinationDirectory, and CallbackAddress tokens")
 }
 
 // Send initiates an FTP file transfer
-func Send(c echo.Context) error {
-	request := &helpers.Request{}
+func Send(context echo.Context) error {
+	request := helpers.Request{}
 
-	err := c.Bind(request)
+	err := context.Bind(&request)
 	if err != nil {
-		response := &helpers.Response{
-			Message: "Could not read request body: " + err.Error(),
-		}
-
-		return c.JSON(http.StatusOK, *response)
+		return jsonresp.Create(context, http.StatusBadRequest, "Could not read request body: "+err.Error())
 	}
 
-	err = helpers.CheckRequest(*request)
+	if len(request.CallbackAddress) < 1 || len(request.DestinationDirectory) < 1 || len(request.DestinationAddress) < 1 {
+		return jsonresp.Create(context, http.StatusBadRequest, "Requests must include at least DestinationAddress, DestinationDirectory, and CallbackAddress tokens")
+	}
+
+	request, err = helpers.DownloadFile(request)
 	if err != nil {
-		response := &helpers.Response{
-			Message: "Requests must include at least FileLocation, DestinationAddress, DestinationDirectory, and CallbackAddress tokens",
-		}
-
-		return c.JSON(http.StatusOK, *response)
+		return jsonresp.Create(context, http.StatusBadRequest, err.Error())
 	}
 
-	fmt.Printf("%+v", request)
+	go helpers.SendFile(request) // Start sending the file asynchronously
 
-	// out, err := os.Create("output.txt")
-	// defer out.Close()
-	// ...
-	// resp, err := http.Get("http://example.com/")
-	// defer resp.Body.Close()
-	// ...
-	// n, err := io.Copy(out, resp.Body)
-
-	go helpers.SendFile(*request) // Start sending the file asynchronously
-
-	response := &helpers.Response{
-		Message: "File transfer started",
-	}
-
-	return c.JSON(http.StatusOK, *response)
+	return jsonresp.Create(context, http.StatusBadRequest, "File transfer started")
 }

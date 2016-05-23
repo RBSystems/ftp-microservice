@@ -104,14 +104,10 @@ definitions:
   file-request:
     type: object
     required:
-      - "FileLocation"
       - "DestinationAddress"
       - "DestinationDirectory"
       - "CallbackAddress"
     properties:
-      FileLocation:
-        type: string
-        description: The location of the file to be transferred
       DestinationAddress:
         type: string
         description: The address of the machine on the receiving end of the FTP connection
