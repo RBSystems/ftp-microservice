@@ -11,7 +11,7 @@ import (
 
 // SendFile actually sends a file via FTP
 func SendFile(request Request) {
-	fmt.Printf("Sending file %s\n", request.FileLocation)
+	fmt.Println("Sending file")
 
 	request.SubmissionTime = time.Now()
 

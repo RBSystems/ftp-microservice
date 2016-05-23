@@ -22,7 +22,7 @@ func main() {
 	e := echo.New()
 	e.Pre(middleware.RemoveTrailingSlash())
 
-	e.Get("/", controllers.Root)
+	e.Get("/", hateoas.RootResponse)
 	e.Get("/health", health.Check)
 	e.Get("/send", controllers.SendInfo)
 	e.Post("/send", controllers.Send)
