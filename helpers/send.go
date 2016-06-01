@@ -22,15 +22,15 @@ func SendFile(request Request) {
 
 	timeout := time.Duration(request.Timeout) * time.Second
 
-	conn, err := ftp.DialTimeout(request.DestinationAddress+":21", timeout)
+	connection, err := ftp.DialTimeout(request.DestinationAddress+":21", timeout)
 	if err != nil {
-		CallCallback(request, "Error connecting to the client device: "+err.Error())
+		CallCallback(request, "Error connectionecting to the client device: "+err.Error())
 		return
 	}
 
-	err = conn.Login(request.UsernameFTP, request.PasswordFTP)
+	err = connection.Login(request.UsernameFTP, request.PasswordFTP)
 	if err != nil {
-		CallCallback(request, "There was an error connecting to the device: "+err.Error())
+		CallCallback(request, "There was an error connectionecting to the device: "+err.Error())
 		return
 	}
 
@@ -44,7 +44,7 @@ func SendFile(request Request) {
 
 	pathToStore := request.DestinationDirectory + "/" + request.Filename // Since the FTP package doesn't do this for us, we add the filename to the destination directory
 
-	err = conn.Stor(pathToStore, file)
+	err = connection.Stor(pathToStore, file)
 	if err != nil {
 		CallCallback(request, "There was an error storing the file: "+err.Error())
 		return

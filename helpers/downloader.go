@@ -9,8 +9,8 @@ import (
 
 // DownloadFile downloads the file reference in the POST body and then sends the file
 func DownloadFile(request Request) (Request, error) {
-	urlTokens := strings.Split(request.FileLocation, "/")
-	request.Filename = urlTokens[len(urlTokens)-1]
+	fileTokens := strings.Split(request.FileLocation, "/")
+	request.Filename = fileTokens[len(fileTokens)-1]
 
 	if _, err := os.Stat("downloads/" + request.Filename); os.IsNotExist(err) { // Download the file if it doesn't exist
 		// Download the referenced file
