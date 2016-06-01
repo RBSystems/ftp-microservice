@@ -7,7 +7,7 @@ import (
 	"strings"
 )
 
-// DownloadFile downloads the file reference in the POST body
+// DownloadFile downloads the file reference in the POST body and then sends the file
 func DownloadFile(request Request) (Request, error) {
 	urlTokens := strings.Split(request.FileLocation, "/")
 	request.Filename = urlTokens[len(urlTokens)-1]
@@ -31,6 +31,8 @@ func DownloadFile(request Request) (Request, error) {
 	if err != nil {
 		return Request{}, err
 	}
+
+	SendFile(request) // Start sending the file
 
 	return request, nil
 }

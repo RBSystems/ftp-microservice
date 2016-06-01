@@ -14,19 +14,19 @@ import (
 func main() {
 	err := hateoas.Load("https://raw.githubusercontent.com/byuoitav/ftp-microservice/master/swagger.yml")
 	if err != nil {
-		fmt.Printf("Could not load swagger.yaml file. Error: %s", err.Error())
+		fmt.Println("Could not load swagger.yaml file. Error: " + err.Error())
 		panic(err)
 	}
 
 	port := ":8002"
-	e := echo.New()
-	e.Pre(middleware.RemoveTrailingSlash())
+	router := echo.New()
+	router.Pre(middleware.RemoveTrailingSlash())
 
-	e.Get("/", hateoas.RootResponse)
-	e.Get("/health", health.Check)
-	e.Get("/send", controllers.SendInfo)
-	e.Post("/send", controllers.Send)
+	router.Get("/", hateoas.RootResponse)
+	router.Get("/health", health.Check)
+	router.Get("/send", controllers.SendInfo)
+	router.Post("/send", controllers.Send)
 
-	fmt.Printf("The FTP microservice is listening on %s\n", port)
-	e.Run(fasthttp.New(port))
+	fmt.Println("The FTP microservice is listening on " + port)
+	router.Run(fasthttp.New(port))
 }

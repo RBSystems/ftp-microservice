@@ -26,12 +26,7 @@ func Send(context echo.Context) error {
 		return jsonresp.Create(context, http.StatusBadRequest, "Requests must include at least DestinationAddress, DestinationDirectory, and CallbackAddress tokens")
 	}
 
-	request, err = helpers.DownloadFile(request)
-	if err != nil {
-		return jsonresp.Create(context, http.StatusBadRequest, err.Error())
-	}
-
-	go helpers.SendFile(request) // Start sending the file asynchronously
+	go helpers.DownloadFile(request) // Download and send the file
 
 	return jsonresp.Create(context, http.StatusBadRequest, "File transfer started")
 }
