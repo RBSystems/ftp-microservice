@@ -7,7 +7,7 @@ import (
 	"github.com/byuoitav/hateoas"
 	"github.com/jessemillar/health"
 	"github.com/labstack/echo"
-	"github.com/labstack/echo/engine/standard"
+	"github.com/labstack/echo/engine/fasthttp"
 	"github.com/labstack/echo/middleware"
 )
 
@@ -28,5 +28,7 @@ func main() {
 	router.Post("/send", controllers.Send)
 
 	fmt.Println("The FTP microservice is listening on " + port)
-	router.Run(standard.New(port))
+	server := fasthttp.New(port)
+	server.ReadBufferSize = 1024 * 10 // Needed to interface properly with WSO2
+	router.Run(server)
 }
