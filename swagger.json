@@ -17,7 +17,7 @@
         "/health": {
             "get": {
                 "summary": "Check Service Health",
-                "description": "Returns information about the microservice's health.\n",
+                "description": "Returns information about the microservice's health.",
                 "tags": [
                     "Health"
                 ],
@@ -49,7 +49,7 @@
         "/send": {
             "get": {
                 "summary": "Use Microservice",
-                "description": "Returns information about the /send endpoint.\n",
+                "description": "Returns information about the /send endpoint.",
                 "tags": [
                     "FTP"
                 ],
@@ -79,7 +79,7 @@
             },
             "post": {
                 "summary": "Send a File",
-                "description": "Send a file through the FTP microservice.\n",
+                "description": "Send a file through the FTP microservice.",
                 "parameters": [{
                     "name": "body",
                     "description": "Information about the file to be sent over FTP",
