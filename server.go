@@ -5,6 +5,7 @@ import (
 
 	"github.com/byuoitav/ftp-microservice/controllers"
 	"github.com/byuoitav/hateoas"
+	"github.com/byuoitav/wso2jwt"
 	"github.com/jessemillar/health"
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/engine/fasthttp"
@@ -24,8 +25,8 @@ func main() {
 
 	router.Get("/", hateoas.RootResponse)
 	router.Get("/health", health.Check)
-	router.Get("/send", controllers.SendInfo)
-	router.Post("/send", controllers.Send)
+	router.Get("/send", controllers.SendInfo, wso2jwt.ValidateJWT())
+	router.Post("/send", controllers.Send, wso2jwt.ValidateJWT())
 
 	fmt.Println("The FTP microservice is listening on " + port)
 	server := fasthttp.New(port)

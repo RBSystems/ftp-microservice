@@ -6,7 +6,7 @@
         "version": "0.1"
     },
     "host": "api.byu.edu:443",
-    "basePath": "/byuoitav/ftp-microservice/0.1",
+    "basePath": "/byuoitav-ftp-microservice/0.1",
     "schemes": [
         "https"
     ],
