@@ -150,7 +150,6 @@
                 "destinationAddress",
                 "destinationDirectory",
                 "fileLocation",
-                "filename",
                 "callbackAddress"
             ],
             "properties": {
@@ -164,11 +163,7 @@
                 },
                 "fileLocation": {
                     "type": "string",
-                    "description": "The local location of the file to be sent (must be accessible from the server running the service)"
-                },
-                "filename": {
-                    "type": "string",
-                    "description": "The name of the file in question"
+                    "description": "The remote URL of the file to be downloaded and sent"
                 },
                 "callbackAddress": {
                     "type": "string",
