@@ -7,7 +7,7 @@ type Request struct {
 	// Required fields
 	DestinationAddress   string `json:"destinationAddress"`   // Hostname to be sent the file
 	DestinationDirectory string `json:"destinationDirectory"` // Path indicates where to store the file on the server
-	FileLocation         string `json:"fileLocation"`         // The remote URL of the file to be downloaded and sent
+	FileURL              string `json:"fileURL"`              // The remote URL of the file to be downloaded and sent
 	CallbackAddress      string `json:"callbackAddress"`      // Complete address to send the notification that the file transfer is complete
 
 	// Optional Fields
