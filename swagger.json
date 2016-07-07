@@ -147,36 +147,46 @@
         "file-request": {
             "type": "object",
             "required": [
-                "DestinationAddress",
-                "DestinationDirectory",
-                "CallbackAddress"
+                "destinationAddress",
+                "destinationDirectory",
+                "fileLocation",
+                "filename",
+                "callbackAddress"
             ],
             "properties": {
-                "DestinationAddress": {
+                "destinationAddress": {
                     "type": "string",
                     "description": "The address of the machine on the receiving end of the FTP connection"
                 },
-                "DestinationDirectory": {
+                "destinationDirectory": {
                     "type": "string",
                     "description": "The directory on the receiving device, relative to root, where we will store the transferred file"
                 },
-                "CallbackAddress": {
+                "fileLocation": {
+                    "type": "string",
+                    "description": "The local location of the file to be sent (must be accessible from the server running the service)"
+                },
+                "filename": {
+                    "type": "string",
+                    "description": "The name of the file in question"
+                },
+                "callbackAddress": {
                     "type": "string",
                     "description": "The address to POST to upon FTP completion"
                 },
-                "CallbackIdentifier": {
+                "callbackIdentifier": {
                     "type": "string",
                     "description": "A value passed to the callback address to identify the process that was completed"
                 },
-                "UsernameFTP": {
+                "usernameFTP": {
                     "type": "string",
                     "description": "The username to use when initiating FTP (defaults to \"anonymous\")"
                 },
-                "PasswordFTP": {
+                "passwordFTP": {
                     "type": "string",
                     "description": "The password to use when initiating FTP (defaults to \"anonymous\")"
                 },
-                "Timeout": {
+                "timeout": {
                     "type": "integer",
                     "description": "The amount of time, in seconds, to wait for the destination device to respond to a request to open an FTP connection (defaults to 30)"
                 }
