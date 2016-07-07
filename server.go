@@ -13,7 +13,7 @@ import (
 )
 
 func main() {
-	err := hateoas.Load("https://raw.githubusercontent.com/byuoitav/ftp-microservice/master/swagger.yml")
+	err := hateoas.Load("https://raw.githubusercontent.com/byuoitav/ftp-microservice/master/swagger.json")
 	if err != nil {
 		fmt.Println("Could not load swagger.yaml file. Error: " + err.Error())
 		panic(err)
