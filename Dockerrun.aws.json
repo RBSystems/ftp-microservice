@@ -5,7 +5,7 @@
         "Key": ".dockercfg"
     },
     "Image": {
-        "Name": "byuoitav/ftp-microservice:latest",
+        "Name": "byuoitav/ftp-microservice:<TAG>",
         "Update": "true"
     },
     "Ports": [{
