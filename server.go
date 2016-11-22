@@ -1,35 +1,38 @@
 package main
 
 import (
-	"fmt"
+	"log"
+	"net/http"
 
 	"github.com/byuoitav/ftp-microservice/handlers"
 	"github.com/byuoitav/hateoas"
 	"github.com/byuoitav/wso2jwt"
 	"github.com/jessemillar/health"
 	"github.com/labstack/echo"
-	"github.com/labstack/echo/engine/fasthttp"
 	"github.com/labstack/echo/middleware"
 )
 
 func main() {
 	err := hateoas.Load("https://raw.githubusercontent.com/byuoitav/ftp-microservice/master/swagger.json")
 	if err != nil {
-		fmt.Println("Could not load swagger.yaml file. Error: " + err.Error())
-		panic(err)
+		log.Fatalln("Could not load Swagger file. Error: " + err.Error())
 	}
 
 	port := ":8002"
 	router := echo.New()
 	router.Pre(middleware.RemoveTrailingSlash())
+	router.Use(echo.WrapMiddleware(wso2jwt.ValidateJWT))
 
-	router.Get("/", hateoas.RootResponse)
-	router.Get("/health", health.Check)
-	router.Get("/send", handlers.SendInfo, wso2jwt.ValidateJWT())
-	router.Post("/send", handlers.Send, wso2jwt.ValidateJWT())
+	router.GET("/", echo.WrapHandler(http.HandlerFunc(hateoas.RootResponse)))
+	router.GET("/health", echo.WrapHandler(http.HandlerFunc(health.Check)))
 
-	fmt.Println("The FTP microservice is listening on " + port)
-	server := fasthttp.New(port)
-	server.ReadBufferSize = 1024 * 10 // Needed to interface properly with WSO2
-	router.Run(server)
+	router.GET("/send", handlers.SendInfo)
+	router.POST("/send", handlers.Send)
+
+	server := http.Server{
+		Addr:           port,
+		MaxHeaderBytes: 1024 * 10,
+	}
+
+	router.StartServer(&server)
 }

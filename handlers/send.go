@@ -10,7 +10,8 @@ import (
 
 // SendInfo returns information about the /send endpoint
 func SendInfo(context echo.Context) error {
-	return jsonresp.New(context, http.StatusBadRequest, "Send a POST request to the /send endpoint with a body including at least DestinationAddress, DestinationDirectory, and CallbackAddress tokens")
+	jsonresp.New(context.Response(), http.StatusBadRequest, "Send a POST request to the /send endpoint with a body including at least DestinationAddress, DestinationDirectory, and CallbackAddress tokens")
+	return nil
 }
 
 // Send initiates an FTP file transfer
@@ -19,14 +20,17 @@ func Send(context echo.Context) error {
 
 	err := context.Bind(&request)
 	if err != nil {
-		return jsonresp.New(context, http.StatusBadRequest, "Could not read request body: "+err.Error())
+		jsonresp.New(context.Response(), http.StatusBadRequest, "Could not read request body: "+err.Error())
+		return nil
 	}
 
 	if len(request.CallbackAddress) < 1 || len(request.DestinationDirectory) < 1 || len(request.DestinationAddress) < 1 {
-		return jsonresp.New(context, http.StatusBadRequest, "Requests must include at least DestinationAddress, DestinationDirectory, and CallbackAddress tokens")
+		jsonresp.New(context.Response(), http.StatusBadRequest, "Requests must include at least DestinationAddress, DestinationDirectory, and CallbackAddress tokens")
+		return nil
 	}
 
 	go helpers.DownloadFile(request) // Download and send the file
 
-	return jsonresp.New(context, http.StatusBadRequest, "File transfer started")
+	jsonresp.New(context.Response(), http.StatusBadRequest, "File transfer started")
+	return nil
 }
