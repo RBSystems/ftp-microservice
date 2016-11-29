@@ -4,9 +4,9 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/byuoitav/authmiddleware"
 	"github.com/byuoitav/ftp-microservice/handlers"
 	"github.com/byuoitav/hateoas"
-	"github.com/byuoitav/wso2jwt"
 	"github.com/jessemillar/health"
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
@@ -23,7 +23,7 @@ func main() {
 	router.Pre(middleware.RemoveTrailingSlash())
 
 	// Use the `secure` routing group to require authentication
-	secure := router.Group("", echo.WrapMiddleware(wso2jwt.ValidateJWT))
+	secure := router.Group("", echo.WrapMiddleware(authmiddleware.Authenticate))
 
 	router.GET("/", echo.WrapHandler(http.HandlerFunc(hateoas.RootResponse)))
 	router.GET("/health", echo.WrapHandler(http.HandlerFunc(health.Check)))
